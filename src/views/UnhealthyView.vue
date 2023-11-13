@@ -1,13 +1,23 @@
 <script setup>
+import { ref } from 'vue';
+
+import { globalThing }from './unhealthy';
+
+const clickCount = ref(0);
+const listenerCount = ref(0);
+
+function crazyThing() {
+  const bigArrayBuffer = new ArrayBuffer(2 ** 20 - 1);
+
+  globalThing.set(`${listenerCount.value}`, bigArrayBuffer);
+
+  listenerCount.value = listenerCount.value + 1;
+}
 
 function onAddClick() {
-  window.addEventListener('click', () => {
-    const bigArrayBuffer = new ArrayBuffer(2 ** 20 - 1);
+  window.addEventListener('click', crazyThing);
 
-    if (!window.dirtyThing) { window.dirtyThing = [] }
-
-    window.dirtyThing.push(bigArrayBuffer);
-  })
+  clickCount.value = 1 + clickCount.value;
 }
 
 </script>
@@ -15,12 +25,15 @@ function onAddClick() {
 <template>
   <main>
     <button @click="onAddClick">ADD</button>
+    <p>Click counts {{ clickCount }}</p>
+    <p>Listeners counts {{ listenerCount }}</p>
   </main>
 </template>
 
 <style>
 main {
   display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center
 }
