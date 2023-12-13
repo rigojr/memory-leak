@@ -1,1 +1,1 @@
-export const globalThing = new Map();
+export let globalThing = [];

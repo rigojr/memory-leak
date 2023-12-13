@@ -43,7 +43,7 @@ main {
 }
 
 button {
-  width: 100%;
+  width: 50%;
   height: 36px;
   margin: 24px;
 }

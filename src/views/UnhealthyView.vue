@@ -5,17 +5,30 @@ import { globalThing }from './unhealthy';
 
 const clickCount = ref(0);
 const listenerCount = ref(0);
+const dirtyElementReference = [];
 
-function crazyThing() {
-  const bigArrayBuffer = new ArrayBuffer(2 ** 20 - 1);
-
-  globalThing.set(`${listenerCount.value}`, bigArrayBuffer);
+function secondCrazyThing() {
+  globalThing.push('x');
 
   listenerCount.value = listenerCount.value + 1;
 }
 
+function crazyThing() {
+  for (let i = 0; i < 100; i++) {
+    const element = document.createElement('div');
+
+    element.addEventListener('click', () => console.log('something useless'));
+    element.innerHTML = `${i}-${globalThing.length}`
+
+    secondCrazyThing();
+
+    dirtyElementReference.push(element);
+  }
+
+}
+
 function onAddClick() {
-  window.addEventListener('click', crazyThing);
+  crazyThing();
 
   clickCount.value = 1 + clickCount.value;
 }
@@ -39,7 +52,7 @@ main {
 }
 
 button {
-  width: 100%;
+  width: 50%;
   height: 36px;
   margin: 24px;
 }
